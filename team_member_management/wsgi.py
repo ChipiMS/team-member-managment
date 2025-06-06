@@ -1,5 +1,5 @@
 """
-WSGI config for teammemberapi project.
+WSGI config for team_member_management project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'teammemberapi.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'team_member_management.settings')
 
 application = get_wsgi_application()
