@@ -1,0 +1,13 @@
+{
+  "name": "Team Member Management",
+  "output": "./documentation",
+  "theme": "gitbook",
+  "tsconfig": "./tsconfig.app.json",
+  "includes": "**/*.ts",
+  "excludes": "**/*.spec.ts",
+  "silent": true,
+  "disableCoverage": true,
+  "disablePrivate": true,
+  "disableProtected": true,
+  "disableInternal": true
+} 
