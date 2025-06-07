@@ -24,11 +24,11 @@ export class TeamMembersService {
     return this.http.post<TeamMember>(this.apiUrl, teamMember);
   }
 
-  updateTeamMember(id: string, teamMember: TeamMember): Observable<TeamMember> {
+  updateTeamMember(id: number, teamMember: TeamMember): Observable<TeamMember> {
     return this.http.put<TeamMember>(`${this.apiUrl}/${id}`, teamMember);
   }
 
-  deleteTeamMember(id: string): Observable<void> {
+  deleteTeamMember(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 } 

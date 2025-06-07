@@ -11,10 +11,10 @@ export class AddTeamMember {
 
 export class UpdateTeamMember {
   static readonly type = '[Team Members] Update Team Member';
-  constructor(public id: string, public teamMember: TeamMember) {}
+  constructor(public id: number, public teamMember: TeamMember) {}
 }
 
 export class DeleteTeamMember {
   static readonly type = '[Team Members] Delete Team Member';
-  constructor(public id: string) {}
+  constructor(public id: number) {}
 } 

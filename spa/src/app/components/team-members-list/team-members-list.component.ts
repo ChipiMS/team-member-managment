@@ -3,15 +3,16 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { Store } from '@ngxs/store';
-import { TeamMembersState } from '../core/store/team-members/team-members.state';
-import { LoadTeamMembers } from '../core/store/team-members/team-members.actions';
-import { TeamMember } from '../core/models/team-member.model';
+import { TeamMembersState } from '../../core/store/team-members/team-members.state';
+import { LoadTeamMembers } from '../../core/store/team-members/team-members.actions';
+import { TeamMember } from '../../core/models/team-member.model';
 import { Observable } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-team-members-list',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule],
+  imports: [CommonModule, TableModule, ButtonModule, RouterLink],
   templateUrl: './team-members-list.component.html',
   styleUrls: ['./team-members-list.component.css']
 })

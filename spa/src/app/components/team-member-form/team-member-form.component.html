@@ -1,0 +1,81 @@
+<form [formGroup]="teamMemberForm" (ngSubmit)="onSubmit()" class="team-member-form">
+  <div class="form-group">
+    <label for="first_name">First Name</label>
+    <input
+      type="text"
+      id="first_name"
+      formControlName="first_name"
+      class="form-control"
+      [class.is-invalid]="teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched"
+    >
+    <div class="invalid-feedback" *ngIf="teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched">
+      First name is required
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="last_name">Last Name</label>
+    <input
+      type="text"
+      id="last_name"
+      formControlName="last_name"
+      class="form-control"
+      [class.is-invalid]="teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched"
+    >
+    <div class="invalid-feedback" *ngIf="teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched">
+      Last name is required
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input
+      type="email"
+      id="email"
+      formControlName="email"
+      class="form-control"
+      [class.is-invalid]="teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched"
+    >
+    <div class="invalid-feedback" *ngIf="teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched">
+      Please enter a valid email address
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="phone_number">Phone Number</label>
+    <input
+      type="tel"
+      id="phone_number"
+      formControlName="phone_number"
+      class="form-control"
+    >
+  </div>
+
+  <div class="form-group">
+    <label for="role_id">Role</label>
+    <select
+      id="role_id"
+      formControlName="role_id"
+      class="form-control"
+    >
+      <option value="">Select a role</option>
+      <option *ngFor="let role of roles()" [value]="role.id">
+        {{ role.name }}
+      </option>
+    </select>
+    <div class="invalid-feedback" *ngIf="error()">
+      {{ error() }}
+    </div>
+    <div class="loading-spinner" *ngIf="loading()">
+      <div class="spinner-border spinner-border-sm" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" [disabled]="teamMemberForm.invalid || loading()">
+      {{ (teamMember$ | async) ? 'Update' : 'Create' }} Team Member
+    </button>
+  </div>
+</form> 

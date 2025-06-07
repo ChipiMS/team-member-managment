@@ -1,11 +1,12 @@
+import { Role } from './role.model';
+
 export interface TeamMember {
-  id: string;
-  firstName: string;
-  lastName: string;
+  id?: number;
+  first_name: string;
+  last_name: string;
   email: string;
-  role: string;
-  department: string;
-  startDate: Date;
-  status: 'active' | 'inactive';
-  avatar?: string;
+  phone_number?: string;
+  role?: Role;
+  created_at?: string;
+  updated_at?: string;
 } 
