@@ -7,83 +7,63 @@
 <p-card [style]="{'width': '100%', 'max-width': '600px'}" class="mx-auto">
   <form [formGroup]="teamMemberForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
     <div class="flex flex-col gap-2">
-      <label for="first_name" class="text-sm font-medium text-gray-700">First Name</label>
-      <input 
-        pInputText 
-        id="first_name" 
-        formControlName="first_name" 
-        [class.ng-invalid]="teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched"
-        class="w-full"
-      >
-      <small class="text-red-500" *ngIf="teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched">
-        First name is required
-      </small>
+      <label for="first_name" class="text-sm font-medium">First Name</label>
+      <input id="first_name" type="text" pInputText formControlName="first_name" 
+             [ngClass]="{'ng-invalid ng-dirty': teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched}"
+             class="w-full" />
+      @if(teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched) {
+        <small class="text-red-500">First name is required</small>
+      }
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="last_name" class="text-sm font-medium text-gray-700">Last Name</label>
-      <input 
-        pInputText 
-        id="last_name" 
-        formControlName="last_name" 
-        [class.ng-invalid]="teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched"
-        class="w-full"
-      >
-      <small class="text-red-500" *ngIf="teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched">
-        Last name is required
-      </small>
+      <label for="last_name" class="text-sm font-medium">Last Name</label>
+      <input id="last_name" type="text" pInputText formControlName="last_name"
+             [ngClass]="{'ng-invalid ng-dirty': teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched}"
+             class="w-full" />
+      @if(teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched) {
+        <small class="text-red-500">Last name is required</small>
+      }
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="email" class="text-sm font-medium text-gray-700">Email</label>
-      <input 
-        pInputText 
-        type="email" 
-        id="email" 
-        formControlName="email" 
-        [class.ng-invalid]="teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched"
-        class="w-full"
-      >
-      <small class="text-red-500" *ngIf="teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched">
-        Please enter a valid email address
-      </small>
+      <label for="email" class="text-sm font-medium">Email</label>
+      <input id="email" type="email" pInputText formControlName="email"
+             [ngClass]="{'ng-invalid ng-dirty': teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched}"
+             class="w-full" />
+      @if(teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched) {
+        <small class="text-red-500">
+          @if(teamMemberForm.get('email')?.errors?.['required']) {
+            Email is required
+          }
+          @if(teamMemberForm.get('email')?.errors?.['email']) {
+            Please enter a valid email address
+          }
+        </small>
+      }
     </div>
 
     <div class="flex flex-col gap-2">
-      <label for="phone_number" class="text-sm font-medium text-gray-700">Phone Number</label>
-      <p-inputMask 
-        id="phone_number" 
-        formControlName="phone_number" 
-        mask="(999) 999-9999" 
-        placeholder="(555) 555-5555"
-        class="w-full"
-      ></p-inputMask>
+      <label for="phone_number" class="text-sm font-medium">Phone Number</label>
+      <p-inputMask id="phone_number" formControlName="phone_number" mask="(999) 999-9999" 
+                   placeholder="(555) 555-5555" class="w-full"></p-inputMask>
     </div>
 
+    @if(roles$ | async; as roles) {
     <div class="flex flex-col gap-2">
-      <label for="role_id" class="text-sm font-medium text-gray-700">Role</label>
-      <p-dropdown
-        id="role_id"
-        formControlName="role_id"
-        [options]="roles()"
-        optionLabel="name"
-        optionValue="id"
-        placeholder="Select a role"
-        [showClear]="true"
-        class="w-full"
-      ></p-dropdown>
-      <small class="text-red-500" *ngIf="error()">
-        {{ error() }}
-      </small>
+      <label for="role" class="text-sm font-medium">Role</label>
+      <p-dropdown id="role" [options]="roles" formControlName="role_id"
+                  optionLabel="name" optionValue="id" placeholder="Select a role"
+                  [showClear]="true" class="w-full"></p-dropdown>
     </div>
+    }
 
-    <div class="flex justify-end">
-      <p-button 
-        type="submit" 
-        [disabled]="teamMemberForm.invalid || loading()"
-        [loading]="loading()"
-        [label]="id() ? 'Update Team Member' : 'Create Team Member'"
-      ></p-button>
+    <div class="flex justify-end gap-2">
+      <p-button type="button" label="Cancel" severity="secondary" 
+                [outlined]="true" routerLink="/team-members"></p-button>
+      <p-button type="submit" label="Save" severity="primary"
+                [disabled]="teamMemberForm.invalid || (loading$ | async)"
+                [loading]="loading$ | async"></p-button>
     </div>
   </form>
 </p-card> 
