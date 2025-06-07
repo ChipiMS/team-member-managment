@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class TeamMembersService {
-  private apiUrl = `${environment.apiUrl}/team-members`;
+  private apiUrl = `${environment.apiUrl}/team-members/`;
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +17,7 @@ export class TeamMembersService {
   }
 
   getTeamMember(id: string): Observable<TeamMember> {
-    return this.http.get<TeamMember>(`${this.apiUrl}/${id}`);
+    return this.http.get<TeamMember>(`${this.apiUrl}${id}`);
   }
 
   createTeamMember(teamMember: TeamMember): Observable<TeamMember> {
@@ -25,10 +25,10 @@ export class TeamMembersService {
   }
 
   updateTeamMember(id: number, teamMember: TeamMember): Observable<TeamMember> {
-    return this.http.put<TeamMember>(`${this.apiUrl}/${id}`, teamMember);
+    return this.http.put<TeamMember>(`${this.apiUrl}${id}/`, teamMember);
   }
 
   deleteTeamMember(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}${id}/`);
   }
 } 

@@ -6,7 +6,7 @@ import { Role } from '../../core/models/role.model';
 import { RoleState } from '../../core/state/role.state';
 import { Store } from '@ngxs/store';
 import { TeamMembersState } from '../../core/store/team-members/team-members.state';
-import { LoadTeamMembers } from '../../core/store/team-members/team-members.actions';
+import { AddTeamMember, LoadTeamMembers, UpdateTeamMember } from '../../core/store/team-members/team-members.actions';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { InputTextModule } from 'primeng/inputtext';
@@ -34,7 +34,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 })
 export class TeamMemberFormComponent implements OnInit {
   public id = input<string>();
-  public formSubmit = new EventEmitter<TeamMember>();
 
   teamMemberForm: FormGroup;
   public roles: Signal<Role[]>;
@@ -91,7 +90,11 @@ export class TeamMemberFormComponent implements OnInit {
         ...formData,
         id: this.id()
       };
-      this.formSubmit.emit(teamMemberData);
+      if(this.id()){
+        this.store.dispatch(new UpdateTeamMember(Number.parseInt(this.id()!), teamMemberData));
+      }else{
+        this.store.dispatch(new AddTeamMember(teamMemberData));
+      }
     }
   }
 } 

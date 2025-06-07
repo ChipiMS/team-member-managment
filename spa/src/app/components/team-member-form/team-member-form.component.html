@@ -1,3 +1,9 @@
+@if(id()) {
+  <h1>Update Team Member</h1>
+}
+@else{
+  <h1>Create Team Member</h1>
+}
 <p-card [style]="{'width': '100%', 'max-width': '600px'}" class="mx-auto">
   <form [formGroup]="teamMemberForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
     <div class="flex flex-col gap-2">
@@ -76,7 +82,7 @@
         type="submit" 
         [disabled]="teamMemberForm.invalid || loading()"
         [loading]="loading()"
-        [label]="(teamMember$ | async) ? 'Update Team Member' : 'Create Team Member'"
+        [label]="id() ? 'Update Team Member' : 'Create Team Member'"
       ></p-button>
     </div>
   </form>
