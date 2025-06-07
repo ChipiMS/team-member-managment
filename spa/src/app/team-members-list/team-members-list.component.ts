@@ -1,0 +1,30 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { Store } from '@ngxs/store';
+import { TeamMembersState } from '../core/store/team-members/team-members.state';
+import { LoadTeamMembers } from '../core/store/team-members/team-members.actions';
+import { TeamMember } from '../core/models/team-member.model';
+import { Observable } from 'rxjs';
+
+@Component({
+  selector: 'app-team-members-list',
+  standalone: true,
+  imports: [CommonModule, TableModule, ButtonModule],
+  templateUrl: './team-members-list.component.html',
+  styleUrls: ['./team-members-list.component.css']
+})
+export class TeamMembersListComponent implements OnInit {
+  teamMembers$: Observable<TeamMember[]>;
+  loading$: Observable<boolean>;
+
+  constructor(private store: Store) {
+    this.teamMembers$ = this.store.select(TeamMembersState.getTeamMembers);
+    this.loading$ = this.store.select(TeamMembersState.getLoading);
+  }
+
+  ngOnInit() {
+    this.store.dispatch(new LoadTeamMembers());
+  }
+} 
