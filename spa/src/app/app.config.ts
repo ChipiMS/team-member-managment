@@ -6,9 +6,11 @@ import Aura from '@primeng/themes/aura';
 import { provideStore } from '@ngxs/store';
 import { TeamMembersState } from './core/store/team-members/team-members.state';
 import { provideHttpClient } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAnimationsAsync(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(),
     provideRouter(routes,withComponentInputBinding()),

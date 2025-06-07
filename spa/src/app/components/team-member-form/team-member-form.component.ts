@@ -9,11 +9,26 @@ import { TeamMembersState } from '../../core/store/team-members/team-members.sta
 import { LoadTeamMembers } from '../../core/store/team-members/team-members.actions';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
   selector: 'app-team-member-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    InputTextModule,
+    InputMaskModule,
+    DropdownModule,
+    ButtonModule,
+    CardModule,
+    ProgressSpinnerModule
+  ],
   templateUrl: './team-member-form.component.html',
   styleUrls: ['./team-member-form.component.css']
 })

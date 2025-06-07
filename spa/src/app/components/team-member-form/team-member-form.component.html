@@ -1,81 +1,83 @@
-<form [formGroup]="teamMemberForm" (ngSubmit)="onSubmit()" class="team-member-form">
-  <div class="form-group">
-    <label for="first_name">First Name</label>
-    <input
-      type="text"
-      id="first_name"
-      formControlName="first_name"
-      class="form-control"
-      [class.is-invalid]="teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched"
-    >
-    <div class="invalid-feedback" *ngIf="teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched">
-      First name is required
+<p-card [style]="{'width': '100%', 'max-width': '600px'}" class="mx-auto">
+  <form [formGroup]="teamMemberForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
+      <label for="first_name" class="text-sm font-medium text-gray-700">First Name</label>
+      <input 
+        pInputText 
+        id="first_name" 
+        formControlName="first_name" 
+        [class.ng-invalid]="teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched"
+        class="w-full"
+      >
+      <small class="text-red-500" *ngIf="teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched">
+        First name is required
+      </small>
     </div>
-  </div>
 
-  <div class="form-group">
-    <label for="last_name">Last Name</label>
-    <input
-      type="text"
-      id="last_name"
-      formControlName="last_name"
-      class="form-control"
-      [class.is-invalid]="teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched"
-    >
-    <div class="invalid-feedback" *ngIf="teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched">
-      Last name is required
+    <div class="flex flex-col gap-2">
+      <label for="last_name" class="text-sm font-medium text-gray-700">Last Name</label>
+      <input 
+        pInputText 
+        id="last_name" 
+        formControlName="last_name" 
+        [class.ng-invalid]="teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched"
+        class="w-full"
+      >
+      <small class="text-red-500" *ngIf="teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched">
+        Last name is required
+      </small>
     </div>
-  </div>
 
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input
-      type="email"
-      id="email"
-      formControlName="email"
-      class="form-control"
-      [class.is-invalid]="teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched"
-    >
-    <div class="invalid-feedback" *ngIf="teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched">
-      Please enter a valid email address
+    <div class="flex flex-col gap-2">
+      <label for="email" class="text-sm font-medium text-gray-700">Email</label>
+      <input 
+        pInputText 
+        type="email" 
+        id="email" 
+        formControlName="email" 
+        [class.ng-invalid]="teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched"
+        class="w-full"
+      >
+      <small class="text-red-500" *ngIf="teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched">
+        Please enter a valid email address
+      </small>
     </div>
-  </div>
 
-  <div class="form-group">
-    <label for="phone_number">Phone Number</label>
-    <input
-      type="tel"
-      id="phone_number"
-      formControlName="phone_number"
-      class="form-control"
-    >
-  </div>
-
-  <div class="form-group">
-    <label for="role_id">Role</label>
-    <select
-      id="role_id"
-      formControlName="role_id"
-      class="form-control"
-    >
-      <option value="">Select a role</option>
-      <option *ngFor="let role of roles()" [value]="role.id">
-        {{ role.name }}
-      </option>
-    </select>
-    <div class="invalid-feedback" *ngIf="error()">
-      {{ error() }}
+    <div class="flex flex-col gap-2">
+      <label for="phone_number" class="text-sm font-medium text-gray-700">Phone Number</label>
+      <p-inputMask 
+        id="phone_number" 
+        formControlName="phone_number" 
+        mask="(999) 999-9999" 
+        placeholder="(555) 555-5555"
+        class="w-full"
+      ></p-inputMask>
     </div>
-    <div class="loading-spinner" *ngIf="loading()">
-      <div class="spinner-border spinner-border-sm" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-  </div>
 
-  <div class="form-actions">
-    <button type="submit" class="btn btn-primary" [disabled]="teamMemberForm.invalid || loading()">
-      {{ (teamMember$ | async) ? 'Update' : 'Create' }} Team Member
-    </button>
-  </div>
-</form> 
+    <div class="flex flex-col gap-2">
+      <label for="role_id" class="text-sm font-medium text-gray-700">Role</label>
+      <p-dropdown
+        id="role_id"
+        formControlName="role_id"
+        [options]="roles()"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Select a role"
+        [showClear]="true"
+        class="w-full"
+      ></p-dropdown>
+      <small class="text-red-500" *ngIf="error()">
+        {{ error() }}
+      </small>
+    </div>
+
+    <div class="flex justify-end">
+      <p-button 
+        type="submit" 
+        [disabled]="teamMemberForm.invalid || loading()"
+        [loading]="loading()"
+        [label]="(teamMember$ | async) ? 'Update Team Member' : 'Create Team Member'"
+      ></p-button>
+    </div>
+  </form>
+</p-card> 
