@@ -178,14 +178,16 @@
     <p-skeleton height="100px" width="100%" />
   }
 
-  <div class="flex justify-end gap-2">
-    <p-button
-      type="button"
-      label="Cancel"
-      severity="secondary"
-      [outlined]="true"
-      routerLink="/team-members"
-    ></p-button>
+  <div class="flex " [ngClass]="{'justify-end': !id(), 'justify-between': id()}">
+    @if (id()) {
+      <p-button
+        type="button"
+        label="Delete"
+        severity="danger"
+        [outlined]="true"
+        (click)="onDelete()"
+      ></p-button>
+    }
     <p-button
       type="submit"
       label="Save"

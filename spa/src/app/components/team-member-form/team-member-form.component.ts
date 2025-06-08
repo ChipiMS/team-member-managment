@@ -12,6 +12,7 @@ import { Store } from '@ngxs/store';
 import { TeamMembersState } from '../../core/store/team-members/team-members.state';
 import {
   AddTeamMember,
+  DeleteTeamMember,
   LoadTeamMembers,
   UpdateTeamMember,
 } from '../../core/store/team-members/team-members.actions';
@@ -25,7 +26,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MessageModule } from 'primeng/message';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { SkeletonModule } from 'primeng/skeleton';
@@ -47,7 +48,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     ReactiveFormsModule,
     RouterLink,
     MessageModule,
-    SkeletonModule,
+    SkeletonModule
   ],
   templateUrl: './team-member-form.component.html',
   styleUrls: ['./team-member-form.component.css'],
@@ -63,6 +64,7 @@ export class TeamMemberFormComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private router: Router,
     private store: Store,
   ) {
     this.teamMemberForm = this.fb.group({
@@ -115,6 +117,14 @@ export class TeamMemberFormComponent implements OnInit {
     return `role_${role.id}`;
   }
 
+  onDelete(): void {
+    this.store
+      .dispatch(new DeleteTeamMember(Number.parseInt(this.id()!)))
+      .subscribe(() => {
+        this.router.navigate(['/']);
+      });
+  }
+
   onSubmit(): void {
     if (this.teamMemberForm.valid) {
       const formData = this.teamMemberForm.value;
@@ -122,13 +132,14 @@ export class TeamMemberFormComponent implements OnInit {
         ...formData,
         id: this.id(),
       };
-      if (this.id()) {
-        this.store.dispatch(
-          new UpdateTeamMember(Number.parseInt(this.id()!), teamMemberData),
-        );
-      } else {
-        this.store.dispatch(new AddTeamMember(teamMemberData));
-      }
+      (this.id()
+        ? this.store.dispatch(
+            new UpdateTeamMember(Number.parseInt(this.id()!), teamMemberData),
+          )
+        : this.store.dispatch(new AddTeamMember(teamMemberData))
+      ).subscribe(() => {
+        this.router.navigate(['/']);
+      });
     } else {
       this.teamMemberForm.markAllAsTouched();
     }

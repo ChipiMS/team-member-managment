@@ -8,6 +8,7 @@ import { TeamMembersState } from './core/store/team-members/team-members.state';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { RolesState } from './core/store/roles/roles.state';
+import { MessageService } from 'primeng/api';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,5 +25,6 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideStore([RolesState, TeamMembersState]),
+    MessageService
   ],
 };
