@@ -31,6 +31,8 @@ import { MessageModule } from 'primeng/message';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { SkeletonModule } from 'primeng/skeleton';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-team-member-form',
@@ -48,8 +50,10 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     ReactiveFormsModule,
     RouterLink,
     MessageModule,
-    SkeletonModule
+    SkeletonModule,
+    ConfirmDialogModule,
   ],
+  providers: [ConfirmationService],
   templateUrl: './team-member-form.component.html',
   styleUrls: ['./team-member-form.component.css'],
 })
@@ -66,6 +70,7 @@ export class TeamMemberFormComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private store: Store,
+    private confirmationService: ConfirmationService,
   ) {
     this.teamMemberForm = this.fb.group({
       first_name: ['', [Validators.required]],
@@ -118,11 +123,27 @@ export class TeamMemberFormComponent implements OnInit {
   }
 
   onDelete(): void {
-    this.store
-      .dispatch(new DeleteTeamMember(Number.parseInt(this.id()!)))
-      .subscribe(() => {
-        this.router.navigate(['/']);
-      });
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this team member?',
+      header: 'Delete Confirmation',
+      icon: 'ph ph-warning',
+      rejectButtonProps: {
+        label: 'Cancel',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptButtonProps: {
+        label: 'Delete',
+        severity: 'danger',
+      },
+      accept: () => {
+        this.store
+          .dispatch(new DeleteTeamMember(Number.parseInt(this.id()!)))
+          .subscribe(() => {
+            this.router.navigate(['/']);
+          });
+      },
+    });
   }
 
   onSubmit(): void {

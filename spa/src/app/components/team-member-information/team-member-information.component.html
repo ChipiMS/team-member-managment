@@ -1,9 +1,13 @@
 @let teamMemberValue = teamMember();
 <a class="flex my-4" [routerLink]="['/edit', teamMember().id]">
     <i class="ph ph-user-circle text-6xl text-gray-500 mr-4"></i>
-    <div class="flex flex-col">
+    <div class="flex flex-col grow-1">
         <h2 class="text-md font-semibold text-gray-900">{{teamMemberValue.first_name}} {{teamMemberValue.last_name}}{{teamMemberValue.role?.is_admin ? ' (admin)' : ''}}</h2>
         <p class="text-sm text-gray-500">{{teamMemberValue.phone_number}}</p>
         <p class="text-sm text-gray-500">{{teamMemberValue.email}}</p>
     </div>
+    <div class="flex">
+        <p-button icon="ph ph-trash" aria-label="Delete" severity="danger" variant="text" (click)="onDelete($event)" />
+    </div>
 </a>
+<p-confirmDialog></p-confirmDialog>
