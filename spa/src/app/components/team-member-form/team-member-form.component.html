@@ -1,69 +1,197 @@
-@if(id()) {
-  <h1>Update Team Member</h1>
-}
-@else{
-  <h1>Create Team Member</h1>
-}
-<p-card [style]="{'width': '100%', 'max-width': '600px'}" class="mx-auto">
-  <form [formGroup]="teamMemberForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-    <div class="flex flex-col gap-2">
-      <label for="first_name" class="text-sm font-medium">First Name</label>
-      <input id="first_name" type="text" pInputText formControlName="first_name" 
-             [ngClass]="{'ng-invalid ng-dirty': teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched}"
-             class="w-full" />
-      @if(teamMemberForm.get('first_name')?.invalid && teamMemberForm.get('first_name')?.touched) {
-        <small class="text-red-500">First name is required</small>
-      }
-    </div>
-
-    <div class="flex flex-col gap-2">
-      <label for="last_name" class="text-sm font-medium">Last Name</label>
-      <input id="last_name" type="text" pInputText formControlName="last_name"
-             [ngClass]="{'ng-invalid ng-dirty': teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched}"
-             class="w-full" />
-      @if(teamMemberForm.get('last_name')?.invalid && teamMemberForm.get('last_name')?.touched) {
-        <small class="text-red-500">Last name is required</small>
-      }
-    </div>
-
-    <div class="flex flex-col gap-2">
-      <label for="email" class="text-sm font-medium">Email</label>
-      <input id="email" type="email" pInputText formControlName="email"
-             [ngClass]="{'ng-invalid ng-dirty': teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched}"
-             class="w-full" />
-      @if(teamMemberForm.get('email')?.invalid && teamMemberForm.get('email')?.touched) {
-        <small class="text-red-500">
-          @if(teamMemberForm.get('email')?.errors?.['required']) {
-            Email is required
-          }
-          @if(teamMemberForm.get('email')?.errors?.['email']) {
-            Please enter a valid email address
-          }
-        </small>
-      }
-    </div>
-
-    <div class="flex flex-col gap-2">
-      <label for="phone_number" class="text-sm font-medium">Phone Number</label>
-      <p-inputMask id="phone_number" formControlName="phone_number" mask="(999) 999-9999" 
-                   placeholder="(555) 555-5555" class="w-full"></p-inputMask>
-    </div>
-
-    @if(roles$ | async; as roles) {
-    <div class="flex flex-col gap-2">
-      <label for="role" class="text-sm font-medium">Role</label>
-      <p-dropdown id="role" [options]="roles" formControlName="role_id"
-                  optionLabel="name" optionValue="id" placeholder="Select a role"
-                  [showClear]="true" class="w-full"></p-dropdown>
-    </div>
+<div class="flex items-center justify-between">
+  <h1 class="text-2xl font-semibold text-gray-900">
+    @if (id()) {
+      Edit team member
+    } @else {
+      Add a team member
     }
+  </h1>
+  <a
+    class="text-3xl text-blue-500"
+    [routerLink]="id() ? '../../' : '../'"
+    aria-label="Back"
+    ><i class="ph ph-arrow-left"></i
+  ></a>
+</div>
 
-    <div class="flex justify-end gap-2">
-      <p-button type="button" label="Cancel" severity="secondary" 
-                [outlined]="true" routerLink="/team-members"></p-button>
-      <p-button type="submit" label="Save" severity="primary"
-                [disabled]="teamMemberForm.invalid || (loading$ | async)"
-                [loading]="loading$ | async"></p-button>
+<p class="mb-8 text-sm text-gray-500">
+  @if (id()) {
+    Edit member info and role.
+  } @else {
+    Set member info and role.
+  }
+</p>
+
+<hr class="my-4 border-gray-200" />
+
+<form
+  [formGroup]="teamMemberForm"
+  (ngSubmit)="onSubmit()"
+  class="flex flex-col gap-4"
+>
+  <fieldset class="flex flex-col gap-4">
+    <legend class="mb-4 text-lg font-semibold text-gray-900">Info</legend>
+    <div>
+      <p-floatlabel variant="on">
+        <input
+          id="first_name"
+          type="text"
+          pInputText
+          formControlName="first_name"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              teamMemberForm.get('first_name')?.invalid &&
+              teamMemberForm.get('first_name')?.touched,
+          }"
+          class="w-full"
+        />
+        <label for="first_name">First Name</label>
+      </p-floatlabel>
+      @if (
+        teamMemberForm.get("first_name")?.invalid &&
+        teamMemberForm.get("first_name")?.touched
+      ) {
+        <p-message severity="error" variant="simple" size="small"
+          >First name is required.</p-message
+        >
+      }
     </div>
-  </form>
-</p-card> 
+
+    <div>
+      <p-floatlabel variant="on">
+        <input
+          id="last_name"
+          type="text"
+          pInputText
+          formControlName="last_name"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              teamMemberForm.get('last_name')?.invalid &&
+              teamMemberForm.get('last_name')?.touched,
+          }"
+          class="w-full"
+        />
+        <label for="last_name">Last Name</label>
+      </p-floatlabel>
+      @if (
+        teamMemberForm.get("last_name")?.invalid &&
+        teamMemberForm.get("last_name")?.touched
+      ) {
+        <p-message severity="error" variant="simple" size="small"
+          >Last name is required.</p-message
+        >
+      }
+    </div>
+    <div>
+      <p-floatlabel variant="on">
+        <input
+          id="email"
+          type="email"
+          pInputText
+          formControlName="email"
+          [ngClass]="{
+            'ng-invalid ng-dirty':
+              teamMemberForm.get('email')?.invalid &&
+              teamMemberForm.get('email')?.touched,
+          }"
+          class="w-full"
+        />
+        <label for="email">Email</label>
+      </p-floatlabel>
+      @if (
+        teamMemberForm.get("email")?.invalid &&
+        teamMemberForm.get("email")?.touched
+      ) {
+        <p-message severity="error" variant="simple" size="small">
+          @if (teamMemberForm.get("email")?.errors?.["required"]) {
+            Email is required.
+          }
+          @if (teamMemberForm.get("email")?.errors?.["email"]) {
+            Please enter a valid email address.
+          }
+        </p-message>
+      }
+    </div>
+
+    <div>
+      <p-floatlabel variant="on">
+        <p-inputMask
+          id="phone_number"
+          formControlName="phone_number"
+          mask="(999) 999-9999"
+          class="w-full"
+        ></p-inputMask>
+        <label for="phone_number">Phone Number</label>
+      </p-floatlabel>
+      @if (
+        teamMemberForm.get("phone_number")?.errors?.["required"] &&
+        teamMemberForm.get("phone_number")?.touched
+      ) {
+        <p-message severity="error" variant="simple" size="small">
+          Phone number is required.
+        </p-message>
+      }
+      @if (
+        teamMemberForm.get("phone_number")?.errors?.["pattern"] &&
+        teamMemberForm.get("phone_number")?.touched
+      ) {
+        <p-message severity="error" variant="simple" size="small">
+          Please enter a valid phone number.
+        </p-message>
+      }
+    </div>
+  </fieldset>
+
+  <p class="text-lg font-semibold text-gray-900" for="role">Role</p>
+  @if (roles$ | async; as roles) {
+    <div>
+      @for (role of roles; track role.id; let index = $index) {
+        <div
+          class="flex items-center justify-between border-b border-gray-200 py-2"
+          (click)="teamMemberForm.get('role_id')?.setValue(role.id)"
+        >
+          <label
+            class="text-gray-400"
+            [ngClass]="{ 'text-gray-900': role.id === selectedRole }"
+            [for]="getRoleId(role)"
+            >{{ role.name }}</label
+          >
+          <p-radiobutton
+            name="role_id"
+            [value]="role.id"
+            formControlName="role_id"
+            [inputId]="getRoleId(role)"
+          />
+        </div>
+      }
+      @if (
+        teamMemberForm.get("role_id")?.errors?.["required"] &&
+        teamMemberForm.get("role_id")?.touched
+      ) {
+        <p-message severity="error" variant="simple" size="small">
+          Role is required.
+        </p-message>
+      }
+    </div>
+  } @else {
+    <p-skeleton height="100px" width="100%" />
+    <p-skeleton height="100px" width="100%" />
+  }
+
+  <div class="flex justify-end gap-2">
+    <p-button
+      type="button"
+      label="Cancel"
+      severity="secondary"
+      [outlined]="true"
+      routerLink="/team-members"
+    ></p-button>
+    <p-button
+      type="submit"
+      label="Save"
+      severity="primary"
+      [disabled]="loading$ | async"
+      [loading]="loading$ | async"
+    ></p-button>
+  </div>
+</form>

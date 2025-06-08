@@ -14,12 +14,15 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideHttpClient(),
-    provideRouter(routes,withComponentInputBinding()),
+    provideRouter(routes, withComponentInputBinding()),
     providePrimeNG({
       theme: {
-        preset: Aura
-      }
+        preset: Aura,
+        options: {
+          darkModeSelector: '.dark',
+        },
+      },
     }),
-    provideStore([RolesState,TeamMembersState])
-  ]
+    provideStore([RolesState, TeamMembersState]),
+  ],
 };
