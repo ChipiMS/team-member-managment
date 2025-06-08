@@ -19,7 +19,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Role
-        fields = ['id', 'name', 'permissions', 'permission_ids', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'permissions', 'permission_ids', 'is_admin', 'created_at', 'updated_at']
         read_only_fields = ['created_at', 'updated_at']
 
 class TeamMemberSerializer(serializers.ModelSerializer):

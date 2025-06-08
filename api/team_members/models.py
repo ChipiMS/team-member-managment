@@ -16,6 +16,7 @@ class Permission(models.Model):
 class Role(models.Model):
     name = models.CharField(max_length=100, unique=True)
     permissions = models.ManyToManyField(Permission, related_name='roles')
+    is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
