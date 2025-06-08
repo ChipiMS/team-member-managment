@@ -1,0 +1,8 @@
+ <a class="flex my-4" [routerLink]="['/edit', teamMember().id]">
+    <i class="ph ph-user-circle text-6xl text-gray-500 mr-4"></i>
+    <div class="flex flex-col">
+        <h2 class="text-md font-semibold text-gray-900">{{teamMember().first_name}} {{teamMember().last_name}}</h2>
+        <p class="text-sm text-gray-500">{{teamMember().phone_number}}</p>
+        <p class="text-sm text-gray-500">{{teamMember().email}}</p>
+    </div>
+</a>

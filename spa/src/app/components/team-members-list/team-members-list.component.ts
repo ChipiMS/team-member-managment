@@ -8,11 +8,13 @@ import { LoadTeamMembers } from '../../core/store/team-members/team-members.acti
 import { TeamMember } from '../../core/models/team-member.model';
 import { Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { TeamMemberInformationComponent } from '../team-member-information/team-member-information.component';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'app-team-members-list',
   standalone: true,
-  imports: [CommonModule, TableModule, ButtonModule, RouterLink],
+  imports: [CommonModule, TableModule, ButtonModule, RouterLink, TeamMemberInformationComponent, SkeletonModule],
   templateUrl: './team-members-list.component.html',
   styleUrls: ['./team-members-list.component.css']
 })
