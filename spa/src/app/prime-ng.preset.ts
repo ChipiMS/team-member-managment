@@ -1,0 +1,26 @@
+import { definePreset } from '@primeng/themes';
+import Aura from '@primeng/themes/aura';
+
+/**
+ * PrimeNG Preset
+ * This preset is based on the Aura theme and customizes some components.
+ * It sets the color for the floatlabel component, the focus color for inputtext,
+ * and the error color for message component.
+ */
+export const PrimeNgPreset = definePreset(Aura, {
+  semantic: {
+    primary: {
+      50: '{blue.50}',
+      100: '{blue.100}',
+      200: '{blue.200}',
+      300: '{blue.300}',
+      400: '{blue.400}',
+      500: '{blue.500}',
+      600: '{blue.600}',
+      700: '{blue.700}',
+      800: '{blue.800}',
+      900: '{blue.900}',
+      950: '{blue.950}'
+  }
+  },
+});
