@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { TeamMember } from '../../models/team-member.model';
-import { TeamMembersService } from '../../services/team-members.service';
+import { TeamMembersService } from '../../services/team-members/team-members.service';
 import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { LoadTeamMembers, AddTeamMember, UpdateTeamMember, DeleteTeamMember } from './team-members.actions';
