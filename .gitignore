@@ -3,6 +3,7 @@ __pycache__/
 api/__pycache__/
 api/team_members/__pycache__/
 api/team_member_management/__pycache__/
+api/test_db.sqlite3
 *.py[cod]
 *$py.class
 *.so
