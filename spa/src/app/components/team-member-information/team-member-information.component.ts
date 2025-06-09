@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TeamMember } from '../../core/models/team-member.model';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { DeleteTeamMember } from '../../core/store/team-members/team-members.actions';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -35,10 +35,12 @@ export class TeamMemberInformationComponent {
    * The constructor for the component.
    * @param store - The store.
    * @param confirmationService - The confirmation service.
+   * @param messageService - The message service.
    */
   constructor(
     private store: Store,
     private confirmationService: ConfirmationService,
+    private messageService: MessageService,
   ) {}
 
   /**
@@ -66,6 +68,7 @@ export class TeamMemberInformationComponent {
           .dispatch(new DeleteTeamMember(this.teamMember().id!))
           .subscribe(() => {
             this.teamMemberDeleted.emit();
+            this.messageService.add({ severity: 'success', summary: 'Team member deleted.', life: 3000 });
           });
       },
     });

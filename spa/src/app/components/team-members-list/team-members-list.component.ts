@@ -25,7 +25,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     ButtonModule,
     RouterLink,
     TeamMemberInformationComponent,
-    SkeletonModule,
+    SkeletonModule
   ],
   templateUrl: './team-members-list.component.html',
   styleUrls: ['./team-members-list.component.css'],

@@ -32,7 +32,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { SkeletonModule } from 'primeng/skeleton';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 /**
  * This component is used to add or edit a team member.
@@ -50,17 +50,17 @@ import { ConfirmationService } from 'primeng/api';
     ButtonModule,
     CardModule,
     CommonModule,
+    ConfirmDialogModule,
     DropdownModule,
     FloatLabelModule,
     InputMaskModule,
     InputTextModule,
+    MessageModule,
     ProgressSpinnerModule,
     RadioButtonModule,
     ReactiveFormsModule,
     RouterLink,
-    MessageModule,
     SkeletonModule,
-    ConfirmDialogModule,
   ],
   providers: [ConfirmationService],
   templateUrl: './team-member-form.component.html',
@@ -103,12 +103,14 @@ export class TeamMemberFormComponent implements OnInit {
    * @param router - The router.
    * @param store - The store.
    * @param confirmationService - The confirmation service.
+   * @param messageService - The message service.
    */
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private store: Store,
     private confirmationService: ConfirmationService,
+    private messageService: MessageService,
   ) {
     this.teamMemberForm = this.fb.group({
       first_name: ['', [Validators.required]],
@@ -192,6 +194,7 @@ export class TeamMemberFormComponent implements OnInit {
         this.store
           .dispatch(new DeleteTeamMember(Number.parseInt(this.id()!)))
           .subscribe(() => {
+            this.messageService.add({ severity: 'success', summary: 'Team member deleted.', life: 3000 });
             this.router.navigate(['/']);
           });
       },
@@ -215,6 +218,7 @@ export class TeamMemberFormComponent implements OnInit {
           )
         : this.store.dispatch(new AddTeamMember(teamMemberData))
       ).subscribe(() => {
+        this.messageService.add({ severity: 'success', summary: this.id() ? 'Team member updated.' : 'Team member added.', life: 3000 });
         this.router.navigate(['/']);
       });
     } else {

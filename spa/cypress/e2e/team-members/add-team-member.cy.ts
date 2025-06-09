@@ -58,6 +58,8 @@ describe('Add Team Member Page', () => {
 
     // Should redirect to team members list
     cy.url().should('include', '/');
+
+    cy.get('p-toast').should('contain', 'Team member added.');
   });
 
   it('should navigate back to list on cancel', () => {

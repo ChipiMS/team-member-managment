@@ -59,10 +59,10 @@ describe('Team Members List Page', () => {
       cy.get('.p-confirmdialog-accept-button').click();
 
       // Check if count decreased
-      cy.get('app-team-member-information').should(
-        'have.length',
-        initialCount - 1,
-      );
+      cy.get('app-team-member-information').should('have.length', initialCount - 1);
     });
+
+    cy.get('p-toast').should('contain', 'Team member deleted.');
   });
+
 });
