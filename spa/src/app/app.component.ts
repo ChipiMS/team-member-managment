@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { TeamMembersListComponent } from './components/team-members-list/team-members-list.component';
 import { RouterOutlet } from '@angular/router';
 
+/**
+ * This component is the root component of the application.
+ * It is used to display the application's main content.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ RouterOutlet],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-}
+export class AppComponent {}

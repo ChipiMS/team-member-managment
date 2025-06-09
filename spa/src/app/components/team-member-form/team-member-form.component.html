@@ -151,6 +151,9 @@
         <div
           class="flex items-center justify-between border-b border-gray-200 py-2"
           (click)="teamMemberForm.get('role_id')?.setValue(role.id)"
+          (keydown.enter)="teamMemberForm.get('role_id')?.setValue(role.id)"
+          tabindex="0"
+          role="button"
         >
           <label
             class="text-gray-400"

@@ -1,10 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { NgxsModule, Store } from '@ngxs/store';
-import { TeamMembersState, TeamMembersStateModel } from './team-members.state';
+import { TeamMembersState } from './team-members.state';
 import { TeamMembersService } from '../../services/team-members/team-members.service';
-import { LoadTeamMembers, AddTeamMember, UpdateTeamMember, DeleteTeamMember } from './team-members.actions';
+import {
+  LoadTeamMembers,
+  AddTeamMember,
+  UpdateTeamMember,
+  DeleteTeamMember,
+} from './team-members.actions';
 import { TeamMember } from '../../models/team-member.model';
-import { Role } from '../../models/role.model';
 import { of, throwError } from 'rxjs';
 
 describe('TeamMembersState', () => {
@@ -20,7 +24,7 @@ describe('TeamMembersState', () => {
       phone_number: '(123) 456-7890',
       role: { id: 1, name: 'Developer', is_admin: false, permissions: [] },
       created_at: '2024-01-01T00:00:00Z',
-      updated_at: '2024-01-01T00:00:00Z'
+      updated_at: '2024-01-01T00:00:00Z',
     },
     {
       id: 2,
@@ -30,8 +34,8 @@ describe('TeamMembersState', () => {
       phone_number: '(098) 765-4321',
       role: { id: 2, name: 'Admin', is_admin: true, permissions: [] },
       created_at: '2024-01-01T00:00:00Z',
-      updated_at: '2024-01-01T00:00:00Z'
-    }
+      updated_at: '2024-01-01T00:00:00Z',
+    },
   ];
 
   beforeEach(() => {
@@ -39,14 +43,14 @@ describe('TeamMembersState', () => {
       'getTeamMembers',
       'createTeamMember',
       'updateTeamMember',
-      'deleteTeamMember'
+      'deleteTeamMember',
     ]);
 
     TestBed.configureTestingModule({
       imports: [NgxsModule.forRoot([TeamMembersState])],
       providers: [
-        { provide: TeamMembersService, useValue: teamMembersService }
-      ]
+        { provide: TeamMembersService, useValue: teamMembersService },
+      ],
     });
 
     store = TestBed.inject(Store);
@@ -61,15 +65,17 @@ describe('TeamMembersState', () => {
 
     store.dispatch(new LoadTeamMembers());
 
-    store.selectOnce(TeamMembersState.getTeamMembers).subscribe(teamMembers => {
-      expect(teamMembers).toEqual(mockTeamMembers);
-    });
+    store
+      .selectOnce(TeamMembersState.getTeamMembers)
+      .subscribe((teamMembers) => {
+        expect(teamMembers).toEqual(mockTeamMembers);
+      });
 
-    store.selectOnce(TeamMembersState.getLoading).subscribe(loading => {
+    store.selectOnce(TeamMembersState.getLoading).subscribe((loading) => {
       expect(loading).toBeFalse();
     });
 
-    store.selectOnce(TeamMembersState.getError).subscribe(error => {
+    store.selectOnce(TeamMembersState.getError).subscribe((error) => {
       expect(error).toBeNull();
     });
   });
@@ -80,11 +86,11 @@ describe('TeamMembersState', () => {
 
     store.dispatch(new LoadTeamMembers());
 
-    store.selectOnce(TeamMembersState.getError).subscribe(stateError => {
+    store.selectOnce(TeamMembersState.getError).subscribe((stateError) => {
       expect(stateError).toEqual(error);
     });
 
-    store.selectOnce(TeamMembersState.getLoading).subscribe(loading => {
+    store.selectOnce(TeamMembersState.getLoading).subscribe((loading) => {
       expect(loading).toBeFalse();
     });
   });
@@ -98,7 +104,7 @@ describe('TeamMembersState', () => {
       phone_number: '(555) 555-5555',
       role: { id: 1, name: 'Developer', is_admin: false, permissions: [] },
       created_at: '2024-01-01T00:00:00Z',
-      updated_at: '2024-01-01T00:00:00Z'
+      updated_at: '2024-01-01T00:00:00Z',
     };
 
     teamMembersService.createTeamMember.and.returnValue(of(newMember));
@@ -110,11 +116,13 @@ describe('TeamMembersState', () => {
     // Then add new member
     store.dispatch(new AddTeamMember(newMember));
 
-    store.selectOnce(TeamMembersState.getTeamMembers).subscribe(teamMembers => {
-      expect(teamMembers).toContain(newMember);
-    });
+    store
+      .selectOnce(TeamMembersState.getTeamMembers)
+      .subscribe((teamMembers) => {
+        expect(teamMembers).toContain(newMember);
+      });
 
-    store.selectOnce(TeamMembersState.getLoading).subscribe(loading => {
+    store.selectOnce(TeamMembersState.getLoading).subscribe((loading) => {
       expect(loading).toBeFalse();
     });
   });
@@ -123,7 +131,7 @@ describe('TeamMembersState', () => {
     const updatedMember: TeamMember = {
       ...mockTeamMembers[0],
       first_name: 'Updated',
-      last_name: 'Name'
+      last_name: 'Name',
     };
 
     teamMembersService.updateTeamMember.and.returnValue(of(updatedMember));
@@ -137,12 +145,14 @@ describe('TeamMembersState', () => {
       store.dispatch(new UpdateTeamMember(updatedMember.id, updatedMember));
     }
 
-    store.selectOnce(TeamMembersState.getTeamMembers).subscribe(teamMembers => {
-      const member = teamMembers.find(tm => tm.id === updatedMember.id);
-      expect(member).toEqual(updatedMember);
-    });
+    store
+      .selectOnce(TeamMembersState.getTeamMembers)
+      .subscribe((teamMembers) => {
+        const member = teamMembers.find((tm) => tm.id === updatedMember.id);
+        expect(member).toEqual(updatedMember);
+      });
 
-    store.selectOnce(TeamMembersState.getLoading).subscribe(loading => {
+    store.selectOnce(TeamMembersState.getLoading).subscribe((loading) => {
       expect(loading).toBeFalse();
     });
   });
@@ -160,61 +170,71 @@ describe('TeamMembersState', () => {
       store.dispatch(new DeleteTeamMember(memberToDelete.id));
     }
 
-    store.selectOnce(TeamMembersState.getTeamMembers).subscribe(teamMembers => {
-      expect(teamMembers).not.toContain(memberToDelete);
-    });
+    store
+      .selectOnce(TeamMembersState.getTeamMembers)
+      .subscribe((teamMembers) => {
+        expect(teamMembers).not.toContain(memberToDelete);
+      });
 
-    store.selectOnce(TeamMembersState.getLoading).subscribe(loading => {
+    store.selectOnce(TeamMembersState.getLoading).subscribe((loading) => {
       expect(loading).toBeFalse();
     });
   });
 
   it('should handle error when adding team member', () => {
     const error = new Error('Failed to add team member');
-    teamMembersService.createTeamMember.and.returnValue(throwError(() => error));
+    teamMembersService.createTeamMember.and.returnValue(
+      throwError(() => error),
+    );
 
     store.dispatch(new AddTeamMember(mockTeamMembers[0]));
 
-    store.selectOnce(TeamMembersState.getError).subscribe(stateError => {
+    store.selectOnce(TeamMembersState.getError).subscribe((stateError) => {
       expect(stateError).toEqual(error);
     });
 
-    store.selectOnce(TeamMembersState.getLoading).subscribe(loading => {
+    store.selectOnce(TeamMembersState.getLoading).subscribe((loading) => {
       expect(loading).toBeFalse();
     });
   });
 
   it('should handle error when updating team member', () => {
     const error = new Error('Failed to update team member');
-    teamMembersService.updateTeamMember.and.returnValue(throwError(() => error));
+    teamMembersService.updateTeamMember.and.returnValue(
+      throwError(() => error),
+    );
 
     if (mockTeamMembers[0].id) {
-      store.dispatch(new UpdateTeamMember(mockTeamMembers[0].id, mockTeamMembers[0]));
+      store.dispatch(
+        new UpdateTeamMember(mockTeamMembers[0].id, mockTeamMembers[0]),
+      );
     }
 
-    store.selectOnce(TeamMembersState.getError).subscribe(stateError => {
+    store.selectOnce(TeamMembersState.getError).subscribe((stateError) => {
       expect(stateError).toEqual(error);
     });
 
-    store.selectOnce(TeamMembersState.getLoading).subscribe(loading => {
+    store.selectOnce(TeamMembersState.getLoading).subscribe((loading) => {
       expect(loading).toBeFalse();
     });
   });
 
   it('should handle error when deleting team member', () => {
     const error = new Error('Failed to delete team member');
-    teamMembersService.deleteTeamMember.and.returnValue(throwError(() => error));
+    teamMembersService.deleteTeamMember.and.returnValue(
+      throwError(() => error),
+    );
 
     if (mockTeamMembers[0].id) {
       store.dispatch(new DeleteTeamMember(mockTeamMembers[0].id));
     }
 
-    store.selectOnce(TeamMembersState.getError).subscribe(stateError => {
+    store.selectOnce(TeamMembersState.getError).subscribe((stateError) => {
       expect(stateError).toEqual(error);
     });
 
-    store.selectOnce(TeamMembersState.getLoading).subscribe(loading => {
+    store.selectOnce(TeamMembersState.getLoading).subscribe((loading) => {
       expect(loading).toBeFalse();
     });
   });
-}); 
+});

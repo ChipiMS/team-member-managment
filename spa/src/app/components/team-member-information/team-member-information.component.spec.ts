@@ -26,12 +26,14 @@ describe('TeamMemberInformationComponent', () => {
     phone_number: '(123) 456-7890',
     role: { id: 1, name: 'Developer', is_admin: false, permissions: [] },
     created_at: '2024-01-01T00:00:00Z',
-    updated_at: '2024-01-01T00:00:00Z'
+    updated_at: '2024-01-01T00:00:00Z',
   };
 
   beforeEach(async () => {
     storeMock = jasmine.createSpyObj('Store', ['dispatch']);
-    confirmationServiceMock = jasmine.createSpyObj('ConfirmationService', ['confirm']);
+    confirmationServiceMock = jasmine.createSpyObj('ConfirmationService', [
+      'confirm',
+    ]);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -40,12 +42,12 @@ describe('TeamMemberInformationComponent', () => {
         ButtonModule,
         CardModule,
         ConfirmDialogModule,
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
       ],
       providers: [
         { provide: Store, useValue: storeMock },
-        { provide: ConfirmationService, useValue: confirmationServiceMock }
-      ]
+        { provide: ConfirmationService, useValue: confirmationServiceMock },
+      ],
     }).compileComponents();
 
     router = TestBed.inject(Router);
@@ -69,25 +71,27 @@ describe('TeamMemberInformationComponent', () => {
     expect(compiled.textContent).toContain(mockTeamMember.phone_number);
   });
 
-
-
   it('should dispatch DeleteTeamMember action and emit event when deletion is confirmed', () => {
     storeMock.dispatch.and.returnValue(of(void 0));
     spyOn(component.teamMemberDeleted, 'emit');
 
-    let acceptCallback: Function | undefined;
-    confirmationServiceMock.confirm.and.callFake((confirmation: Confirmation) => {
-      acceptCallback = confirmation.accept;
-      return confirmationServiceMock;
-    });
+    let acceptCallback: (() => void) | undefined;
+    confirmationServiceMock.confirm.and.callFake(
+      (confirmation: Confirmation) => {
+        acceptCallback = confirmation.accept as () => void;
+        return confirmationServiceMock;
+      },
+    );
 
     const event = new MouseEvent('click');
     component.onDelete(event);
 
     if (acceptCallback && mockTeamMember.id) {
       acceptCallback();
-      expect(storeMock.dispatch).toHaveBeenCalledWith(new DeleteTeamMember(mockTeamMember.id));
+      expect(storeMock.dispatch).toHaveBeenCalledWith(
+        new DeleteTeamMember(mockTeamMember.id),
+      );
       expect(component.teamMemberDeleted.emit).toHaveBeenCalled();
     }
   });
-}); 
+});

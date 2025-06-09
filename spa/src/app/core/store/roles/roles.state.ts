@@ -5,149 +5,131 @@ import { of } from 'rxjs';
 import { RolesService } from '../../services/roles/roles.service';
 import {
   LoadRoles,
-  AddRole,
-  UpdateRole,
-  DeleteRole,
   SetRoles,
   SetRolesLoading,
-  SetRolesError
+  SetRolesError,
 } from './roles.actions';
+import { Role } from '../../models/role.model';
 
+/**
+ * This interface represents the state of the roles.
+ */
 export interface RolesStateModel {
-  roles: any[];
+  /**
+   * The roles.
+   */
+  roles: Role[];
+  /**
+   * If roles are loading.
+   */
   loading: boolean;
-  error: string | null;
+  /**
+   * If exists, an error happened while loading.
+   */
+  error: Error | string | null;
 }
 
+/**
+ * This state is used to store the roles.
+ */
 @State<RolesStateModel>({
   name: 'roles',
   defaults: {
     roles: [],
     loading: false,
-    error: null
-  }
+    error: null,
+  },
 })
 @Injectable()
 export class RolesState {
+  /**
+   * Constructor for RolesState.
+   * @param rolesService 
+   */
   constructor(private rolesService: RolesService) {}
 
+  /**
+   * The selector for the roles.
+   * @param state - The state of the roles.
+   * @returns The roles.
+   */
   @Selector()
   static getRoles(state: RolesStateModel) {
     return state.roles;
   }
 
+  /**
+   * The selector for the loading state.
+   * @param state - The state of the roles.
+   * @returns The loading state.
+   */
   @Selector()
   static getLoading(state: RolesStateModel) {
     return state.loading;
   }
 
+  /**
+   * The selector for the error state.
+   * @param state - The state of the roles.
+   * @returns The error state.
+   */
   @Selector()
   static getError(state: RolesStateModel) {
     return state.error;
   }
 
+  /**
+   * The action to load the roles.
+   * @param ctx - The state context.
+   */
   @Action(LoadRoles)
   loadRoles(ctx: StateContext<RolesStateModel>) {
-    const state = ctx.getState();
     ctx.patchState({ loading: true, error: null });
 
     return this.rolesService.getRoles().pipe(
-      tap(roles => {
+      tap((roles) => {
         ctx.patchState({
           roles,
-          loading: false
+          loading: false,
         });
       }),
-      catchError(error => {
+      catchError((error) => {
         ctx.patchState({
           loading: false,
-          error: error.message
+          error: error.message,
         });
         return of(error);
-      })
+      }),
     );
   }
 
-  @Action(AddRole)
-  addRole(ctx: StateContext<RolesStateModel>, action: AddRole) {
-    const state = ctx.getState();
-    ctx.patchState({ loading: true, error: null });
-
-    return this.rolesService.createRole(action.payload).pipe(
-      tap(newRole => {
-        ctx.patchState({
-          roles: [...state.roles, newRole],
-          loading: false
-        });
-      }),
-      catchError(error => {
-        ctx.patchState({
-          loading: false,
-          error: error.message
-        });
-        return of(error);
-      })
-    );
-  }
-
-  @Action(UpdateRole)
-  updateRole(ctx: StateContext<RolesStateModel>, action: UpdateRole) {
-    const state = ctx.getState();
-    ctx.patchState({ loading: true, error: null });
-
-    return this.rolesService.updateRole(action.id, action.payload).pipe(
-      tap(updatedRole => {
-        ctx.patchState({
-          roles: state.roles.map(role => 
-            role.id === action.id ? updatedRole : role
-          ),
-          loading: false
-        });
-      }),
-      catchError(error => {
-        ctx.patchState({
-          loading: false,
-          error: error.message
-        });
-        return of(error);
-      })
-    );
-  }
-
-  @Action(DeleteRole)
-  deleteRole(ctx: StateContext<RolesStateModel>, action: DeleteRole) {
-    const state = ctx.getState();
-    ctx.patchState({ loading: true, error: null });
-
-    return this.rolesService.deleteRole(action.id).pipe(
-      tap(() => {
-        ctx.patchState({
-          roles: state.roles.filter(role => role.id !== action.id),
-          loading: false
-        });
-      }),
-      catchError(error => {
-        ctx.patchState({
-          loading: false,
-          error: error.message
-        });
-        return of(error);
-      })
-    );
-  }
-
+  /**
+   * The action to set the roles.
+   * @param ctx - The state context.
+   * @param action - The action to set the roles.
+   */
   @Action(SetRoles)
   setRoles(ctx: StateContext<RolesStateModel>, action: SetRoles) {
     ctx.patchState({ roles: action.payload });
   }
 
+  /**
+   * The action to set the loading state.
+   * @param ctx - The state context.
+   * @param action - The action to set the loading state.
+   */
   @Action(SetRolesLoading)
   setLoading(ctx: StateContext<RolesStateModel>, action: SetRolesLoading) {
     ctx.patchState({ loading: action.payload });
   }
 
+  /**
+   * The action to set the error state.
+   * @param ctx - The state context.
+   * @param action - The action to set the error state.
+   */
   @Action(SetRolesError)
   setError(ctx: StateContext<RolesStateModel>, action: SetRolesError) {
     ctx.patchState({ error: action.payload });
   }
-} 
+}

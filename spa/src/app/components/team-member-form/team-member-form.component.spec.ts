@@ -3,7 +3,7 @@ import { TeamMemberFormComponent } from './team-member-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { of, Observable } from 'rxjs';
-import { AddTeamMember, DeleteTeamMember, LoadTeamMembers, UpdateTeamMember } from '../../core/store/team-members/team-members.actions';
+import { LoadTeamMembers } from '../../core/store/team-members/team-members.actions';
 import { LoadRoles } from '../../core/store/roles/roles.actions';
 import { TeamMember } from '../../core/models/team-member.model';
 import { Role } from '../../core/models/role.model';
@@ -18,7 +18,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { SkeletonModule } from 'primeng/skeleton';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, Confirmation } from 'primeng/api';
+import { ConfirmationService } from 'primeng/api';
 import { InputMaskModule } from 'primeng/inputmask';
 import { RolesState } from '../../core/store/roles/roles.state';
 import { TeamMembersState } from '../../core/store/team-members/team-members.state';
@@ -39,17 +39,19 @@ describe('TeamMemberFormComponent', () => {
     phone_number: '(123) 456-7890',
     role: { id: 1, name: 'Developer', is_admin: false, permissions: [] },
     created_at: '2024-01-01T00:00:00Z',
-    updated_at: '2024-01-01T00:00:00Z'
+    updated_at: '2024-01-01T00:00:00Z',
   };
 
   const mockRoles: Role[] = [
     { id: 1, name: 'Developer', is_admin: false, permissions: [] },
-    { id: 2, name: 'Admin', is_admin: true, permissions: [] }
+    { id: 2, name: 'Admin', is_admin: true, permissions: [] },
   ];
 
   beforeEach(async () => {
     storeMock = jasmine.createSpyObj('Store', ['dispatch', 'select']);
-    confirmationServiceMock = jasmine.createSpyObj('ConfirmationService', ['confirm']);
+    confirmationServiceMock = jasmine.createSpyObj('ConfirmationService', [
+      'confirm',
+    ]);
 
     // Mock store selectors
     storeMock.select.and.callFake(<T>(selector: TypedSelector<T>) => {
@@ -83,12 +85,12 @@ describe('TeamMemberFormComponent', () => {
         RadioButtonModule,
         ConfirmDialogModule,
         InputMaskModule,
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
       ],
       providers: [
         { provide: Store, useValue: storeMock },
-        { provide: ConfirmationService, useValue: confirmationServiceMock }
-      ]
+        { provide: ConfirmationService, useValue: confirmationServiceMock },
+      ],
     }).compileComponents();
 
     router = TestBed.inject(Router);
@@ -117,34 +119,39 @@ describe('TeamMemberFormComponent', () => {
     expect(storeMock.dispatch).toHaveBeenCalledWith(new LoadTeamMembers());
   });
 
-
-
-
-
-
-  
-
   it('should validate required fields', () => {
     component.onSubmit();
 
-    expect(component.teamMemberForm.get('first_name')?.errors?.['required']).toBeTruthy();
-    expect(component.teamMemberForm.get('last_name')?.errors?.['required']).toBeTruthy();
-    expect(component.teamMemberForm.get('email')?.errors?.['required']).toBeTruthy();
-    expect(component.teamMemberForm.get('role_id')?.errors?.['required']).toBeTruthy();
+    expect(
+      component.teamMemberForm.get('first_name')?.errors?.['required'],
+    ).toBeTruthy();
+    expect(
+      component.teamMemberForm.get('last_name')?.errors?.['required'],
+    ).toBeTruthy();
+    expect(
+      component.teamMemberForm.get('email')?.errors?.['required'],
+    ).toBeTruthy();
+    expect(
+      component.teamMemberForm.get('role_id')?.errors?.['required'],
+    ).toBeTruthy();
   });
 
   it('should validate email format', () => {
     component.teamMemberForm.get('email')?.setValue('invalid-email');
     component.teamMemberForm.get('email')?.markAsTouched();
 
-    expect(component.teamMemberForm.get('email')?.errors?.['email']).toBeTruthy();
+    expect(
+      component.teamMemberForm.get('email')?.errors?.['email'],
+    ).toBeTruthy();
   });
 
   it('should validate phone number format', () => {
     component.teamMemberForm.get('phone_number')?.setValue('1234567890');
     component.teamMemberForm.get('phone_number')?.markAsTouched();
 
-    expect(component.teamMemberForm.get('phone_number')?.errors?.['pattern']).toBeTruthy();
+    expect(
+      component.teamMemberForm.get('phone_number')?.errors?.['pattern'],
+    ).toBeTruthy();
   });
 
   it('should get role ID correctly', () => {
@@ -156,4 +163,4 @@ describe('TeamMemberFormComponent', () => {
     component.teamMemberForm.get('role_id')?.setValue(1);
     expect(component.selectedRole).toBe(1);
   });
-}); 
+});

@@ -10,6 +10,9 @@ import { RolesState } from './core/store/roles/roles.state';
 import { MessageService } from 'primeng/api';
 import { PrimeNgPreset } from './prime-ng.preset';
 
+/**
+ * The application configuration.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimationsAsync(),
@@ -25,6 +28,6 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideStore([RolesState, TeamMembersState]),
-    MessageService
+    MessageService,
   ],
 };

@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -34,6 +34,15 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 
+/**
+ * This component is used to add or edit a team member.
+ * It displays a form with the team member's information and a dropdown to select the role.
+ * It also displays a button to delete the team member.
+ * It also displays a button to submit the form.
+ * It also displays a button to cancel the form.
+ * It also displays a button to reset the form.
+ * It also displays a button to navigate to the team members list.
+ */
 @Component({
   selector: 'app-team-member-form',
   standalone: true,
@@ -58,14 +67,43 @@ import { ConfirmationService } from 'primeng/api';
   styleUrls: ['./team-member-form.component.css'],
 })
 export class TeamMemberFormComponent implements OnInit {
+  /**
+   * The id of the team member to edit.
+   */
   public id = input<string>();
 
-  teamMemberForm: FormGroup;
-  public roles$: Observable<Role[]>;
+  /**
+   * The error message to display.
+   */
+  public error$: Observable<Error | string | null>;
+
+  /**
+   * The loading state of the component.
+   */
   public loading$: Observable<boolean>;
-  public error$: Observable<string | null>;
+
+  /**
+   * The roles to display in the dropdown.
+   */
+  public roles$: Observable<Role[]>;
+
+  /**
+   * The team member to display in the form.
+   */
   public teamMember$: Observable<TeamMember | undefined>;
 
+  /**
+   * The form group for the team member.
+   */
+  public teamMemberForm: FormGroup;
+
+  /**
+   * The constructor for the component.
+   * @param fb - The form builder.
+   * @param router - The router.
+   * @param store - The store.
+   * @param confirmationService - The confirmation service.
+   */
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -109,20 +147,34 @@ export class TeamMemberFormComponent implements OnInit {
     });
   }
 
+  /**
+   * The role id selected in the form.
+   */
   public get selectedRole(): number | undefined {
     return this.teamMemberForm.get('role_id')?.value;
   }
 
-  ngOnInit(): void {
+  /**
+   * The ngOnInit method.
+   */
+  public ngOnInit(): void {
     this.store.dispatch(new LoadRoles());
     this.store.dispatch(new LoadTeamMembers());
   }
 
-  getRoleId(role: Role): string {
+  /**
+   * The getRoleId method.
+   * @param role - The role to get the id for.
+   * @returns The id of the role.
+   */
+  public getRoleId(role: Role): string {
     return `role_${role.id}`;
   }
 
-  onDelete(): void {
+  /**
+   * Confirmation dialog to delete the team member. If the user confirms, the team member is deleted.
+   */
+  public onDelete(): void {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete this team member?',
       header: 'Delete Confirmation',
@@ -146,7 +198,11 @@ export class TeamMemberFormComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  /**
+   * The onSubmit method.
+   * If the form is valid, the team member is added or updated.
+   */
+  public onSubmit(): void {
     if (this.teamMemberForm.valid) {
       const formData = this.teamMemberForm.value;
       const teamMemberData: TeamMember = {

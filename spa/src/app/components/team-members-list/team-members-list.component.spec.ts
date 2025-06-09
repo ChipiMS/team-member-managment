@@ -26,7 +26,7 @@ describe('TeamMembersListComponent', () => {
       phone_number: '(123) 456-7890',
       role: { id: 1, name: 'Developer', is_admin: false, permissions: [] },
       created_at: '2024-01-01T00:00:00Z',
-      updated_at: '2024-01-01T00:00:00Z'
+      updated_at: '2024-01-01T00:00:00Z',
     },
     {
       id: 2,
@@ -36,8 +36,8 @@ describe('TeamMembersListComponent', () => {
       phone_number: '(098) 765-4321',
       role: { id: 2, name: 'Admin', is_admin: true, permissions: [] },
       created_at: '2024-01-01T00:00:00Z',
-      updated_at: '2024-01-01T00:00:00Z'
-    }
+      updated_at: '2024-01-01T00:00:00Z',
+    },
   ];
 
   beforeEach(async () => {
@@ -63,11 +63,9 @@ describe('TeamMembersListComponent', () => {
         CommonModule,
         ButtonModule,
         CardModule,
-        RouterModule.forRoot([])
+        RouterModule.forRoot([]),
       ],
-      providers: [
-        { provide: Store, useValue: storeMock }
-      ]
+      providers: [{ provide: Store, useValue: storeMock }],
     }).compileComponents();
 
     router = TestBed.inject(Router);
@@ -89,16 +87,13 @@ describe('TeamMembersListComponent', () => {
 
   it('should display team members list', () => {
     const compiled = fixture.nativeElement;
-    mockTeamMembers.forEach(member => {
+    mockTeamMembers.forEach((member) => {
       expect(compiled.textContent).toContain(member.first_name);
       expect(compiled.textContent).toContain(member.last_name);
       expect(compiled.textContent).toContain(member.email);
       expect(compiled.textContent).toContain(member.phone_number);
     });
   });
-
-
-
 
   it('should show loading state', () => {
     storeMock.select.and.callFake(<T>(selector: TypedSelector<T>) => {
@@ -116,8 +111,6 @@ describe('TeamMembersListComponent', () => {
     expect(compiled.querySelector('p-skeleton')).toBeTruthy();
   });
 
-
-
   it('should show empty state when no team members', () => {
     storeMock.select.and.callFake(<T>(selector: TypedSelector<T>) => {
       if (selector === TeamMembersState.getTeamMembers) {
@@ -133,4 +126,4 @@ describe('TeamMembersListComponent', () => {
     const compiled = fixture.nativeElement;
     expect(compiled.textContent).toContain('No team members found');
   });
-}); 
+});

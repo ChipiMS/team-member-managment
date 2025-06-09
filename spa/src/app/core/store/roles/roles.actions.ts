@@ -1,33 +1,59 @@
+import { Role } from '../../models/role.model';
+
+/**
+ * This action is used to load the roles from the API.
+ */
 export class LoadRoles {
+  /**
+   * The type of the action.
+   */
   static readonly type = '[Roles] Load Roles';
 }
 
-export class AddRole {
-  static readonly type = '[Roles] Add Role';
-  constructor(public payload: any) {}
-}
-
-export class UpdateRole {
-  static readonly type = '[Roles] Update Role';
-  constructor(public id: number, public payload: any) {}
-}
-
-export class DeleteRole {
-  static readonly type = '[Roles] Delete Role';
-  constructor(public id: number) {}
-}
-
+/**
+ * This action is used to set the roles in the store.
+ */
 export class SetRoles {
+  /**
+   * The type of the action.
+   */
   static readonly type = '[Roles] Set Roles';
-  constructor(public payload: any[]) {}
+
+  /**
+   * The constructor of the action.
+   * @param payload - The roles to set.
+   */
+  constructor(public payload: Role[]) {}
 }
 
+/**
+ * This action is used to set the loading state of the roles in the store.
+ */
 export class SetRolesLoading {
+  /**
+   * The type of the action.
+   */
   static readonly type = '[Roles] Set Loading';
+
+  /**
+   * The constructor of the action.
+   * @param payload - The loading state to set.
+   */
   constructor(public payload: boolean) {}
 }
 
+/**
+ * This action is used to set the error state of the roles in the store.
+ */
 export class SetRolesError {
+  /**
+   * The type of the action.
+   */
   static readonly type = '[Roles] Set Error';
-  constructor(public payload: string | null) {}
-} 
+
+  /**
+   * The constructor of the action.
+   * @param payload - The error to set.
+   */
+  constructor(public payload: Error | null) {}
+}
