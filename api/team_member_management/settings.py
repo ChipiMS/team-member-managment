@@ -3,6 +3,7 @@ Django settings for team_member_management project.
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -64,8 +65,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'test_db.sqlite3',
     }
 }
+
+# Use test database for Cypress tests
+if os.environ.get('CYPRESS_TESTING'):
+    DATABASES['default'] = DATABASES['test']
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

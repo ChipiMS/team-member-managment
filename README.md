@@ -137,6 +137,38 @@ The documentation includes:
    npm run e2e
    ```
 
+### End-to-End Testing with Cypress
+
+To run Cypress e2e tests with a clean test database:
+
+1. Set up the test database:
+   ```bash
+   # From the api directory
+   cd api
+   python setup_test_db.py
+   ```
+
+2. Start the API server with test database:
+   ```bash
+   # In one terminal
+   export CYPRESS_TESTING=true  # For Linux/Mac
+   # or
+   set CYPRESS_TESTING=true     # For Windows
+   python manage.py runserver
+   ```
+
+3. Run Cypress tests:
+   ```bash
+   # From the spa directory in another terminal
+   cd spa
+   npm run e2e
+   ```
+
+The test database will be automatically created with sample data for testing. This ensures that:
+- Tests run against a consistent dataset
+- Production data is not affected
+- Tests are isolated and reproducible
+
 ## API Endpoints
 
 - Team Members: `/api/team-members/`
