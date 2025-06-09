@@ -89,5 +89,9 @@ describe('Edit Team Member Page', () => {
     cy.url().should('include', '/');
   });
 
-  
+  it('should show error message when team member is not found', () => {
+    cy.visit('/edit/999');
+    cy.get('p-toast').should('contain', 'Team member not found.');
+    cy.url().should('include', '/');
+  });
 });

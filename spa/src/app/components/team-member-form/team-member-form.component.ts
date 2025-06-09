@@ -19,7 +19,7 @@ import {
 import { RolesState } from '../../core/store/roles/roles.state';
 import { LoadRoles } from '../../core/store/roles/roles.actions';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
@@ -90,7 +90,7 @@ export class TeamMemberFormComponent implements OnInit {
   /**
    * The team member to display in the form.
    */
-  public teamMember$: Observable<TeamMember | undefined>;
+  public teamMember$!: Observable<TeamMember | undefined>;
 
   /**
    * The form group for the team member.
@@ -126,27 +126,6 @@ export class TeamMemberFormComponent implements OnInit {
     this.roles$ = this.store.select(RolesState.getRoles);
     this.loading$ = this.store.select(RolesState.getLoading);
     this.error$ = this.store.select(RolesState.getError);
-    this.teamMember$ = this.store.select(TeamMembersState.getTeamMembers).pipe(
-      map((members) => {
-        const memberId = this.id();
-        return memberId
-          ? members.find((m) => m.id?.toString() === memberId)
-          : undefined;
-      }),
-    );
-
-    // Subscribe to team member changes
-    this.teamMember$.subscribe((member) => {
-      if (member) {
-        this.teamMemberForm.patchValue({
-          first_name: member.first_name,
-          last_name: member.last_name,
-          email: member.email,
-          phone_number: member.phone_number,
-          role_id: member.role?.id,
-        });
-      }
-    });
   }
 
   /**
@@ -158,10 +137,45 @@ export class TeamMemberFormComponent implements OnInit {
 
   /**
    * The ngOnInit method.
+   * Loads the roles and team members.
+   * If the id is provided, loads the team member.
+   * If the id is not provided, shows an error message and navigates to the team members list.
    */
   public ngOnInit(): void {
     this.store.dispatch(new LoadRoles());
     this.store.dispatch(new LoadTeamMembers());
+
+    this.teamMember$ = this.store.select(TeamMembersState.getTeamMembers).pipe(
+      map((members) => {
+        const memberId = this.id(),
+          member = members.find((m) => m.id?.toString() === memberId);
+        return member;
+      }),
+    );
+
+    // Subscribe to team member changes
+    this.teamMember$.pipe(first()).subscribe((member) => {
+      console.log(member);
+      if (member) {
+        this.teamMemberForm.patchValue({
+          first_name: member.first_name,
+          last_name: member.last_name,
+          email: member.email,
+          phone_number: member.phone_number,
+          role_id: member.role?.id,
+        });
+      } else {
+        console.log(this.id());
+        if (this.id()) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Team member not found.',
+            life: 3000,
+          });
+          this.router.navigate(['/']);
+        }
+      }
+    });
   }
 
   /**
@@ -194,7 +208,11 @@ export class TeamMemberFormComponent implements OnInit {
         this.store
           .dispatch(new DeleteTeamMember(Number.parseInt(this.id()!)))
           .subscribe(() => {
-            this.messageService.add({ severity: 'success', summary: 'Team member deleted.', life: 3000 });
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Team member deleted.',
+              life: 3000,
+            });
             this.router.navigate(['/']);
           });
       },
@@ -218,7 +236,11 @@ export class TeamMemberFormComponent implements OnInit {
           )
         : this.store.dispatch(new AddTeamMember(teamMemberData))
       ).subscribe(() => {
-        this.messageService.add({ severity: 'success', summary: this.id() ? 'Team member updated.' : 'Team member added.', life: 3000 });
+        this.messageService.add({
+          severity: 'success',
+          summary: this.id() ? 'Team member updated.' : 'Team member added.',
+          life: 3000,
+        });
         this.router.navigate(['/']);
       });
     } else {
