@@ -1,5 +1,8 @@
 # Python
 __pycache__/
+api/__pycache__/
+api/team_members/__pycache__/
+api/team_member_management/__pycache__/
 *.py[cod]
 *$py.class
 *.so
