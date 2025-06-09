@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { tap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { RolesService } from './roles.service';
+import { RolesService } from '../../services/roles/roles.service';
 import {
   LoadRoles,
   AddRole,
