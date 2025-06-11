@@ -29,8 +29,7 @@ class TeamMemberSerializer(serializers.ModelSerializer):
         queryset=Role.objects.all(),
         source='role',
         write_only=True,
-        required=False,
-        allow_null=True
+        required=True
     )
 
     class Meta:

@@ -33,7 +33,7 @@ class TeamMember(models.Model):
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=20)
-    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True, related_name='team_members')
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, related_name='team_members')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

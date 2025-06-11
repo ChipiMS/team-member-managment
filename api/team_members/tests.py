@@ -108,7 +108,7 @@ class TeamMemberAPITests(APITestCase):
             first_name='John',
             last_name='Doe',
             email='john@example.com',
-            phone_number='1234567890',
+            phone_number='(123) 456-7890',
             role=self.role
         )
         self.url = reverse('teammember-list', args=[])
@@ -123,8 +123,8 @@ class TeamMemberAPITests(APITestCase):
             'first_name': 'Jane',
             'last_name': 'Smith',
             'email': 'jane@example.com',
-            'phone_number': '0987654321',
-            'role': self.role.id
+            'phone_number': '(098) 765-4321',
+            'role_id': self.role.id
         }
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -148,8 +148,8 @@ class TeamMemberAPITests(APITestCase):
             'first_name': 'John',
             'last_name': 'Updated',
             'email': 'john@example.com',
-            'phone_number': '1234567890',
-            'role': self.role.id
+            'phone_number': '(123) 456-7890',
+            'role_id': self.role.id
         }
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -166,19 +166,72 @@ class TeamMemberAPITests(APITestCase):
             'first_name': 'Jane',
             'last_name': 'Smith',
             'email': 'jane@example.com',
-            'phone_number': '0987654321'
+            'phone_number': '(098) 765-4321'
         }
         response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(TeamMember.objects.get(email='jane@example.com').role, None)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('role_id', response.data)
+        self.assertEqual(response.data['role_id'][0], 'This field is required.')
 
     def test_create_team_member_with_duplicate_email(self):
         data = {
             'first_name': 'Jane',
             'last_name': 'Smith',
             'email': 'john@example.com',
-            'phone_number': '0987654321',
+            'phone_number': '(098) 765-4321',
             'role': self.role.id
         }
         response = self.client.post(self.url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_team_member_without_phone(self):
+        data = {
+            'first_name': 'Jane',
+            'last_name': 'Smith',
+            'email': 'jane@example.com',
+            'role': self.role.id
+        }
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('phone_number', response.data)
+        self.assertEqual(response.data['phone_number'][0], 'This field is required.')
+
+    def test_create_team_member_with_invalid_phone_format(self):
+        data = {
+            'first_name': 'Jane',
+            'last_name': 'Smith',
+            'email': 'jane@example.com',
+            'phone_number': '1234567890',  # Invalid format
+            'role': self.role.id
+        }
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('phone_number', response.data)
+        self.assertEqual(response.data['phone_number'][0], 'Please enter a valid phone number in the format (XXX) XXX-XXXX')
+
+    def test_update_team_member_with_invalid_phone_format(self):
+        url = reverse('teammember-detail', args=[self.team_member.id])
+        data = {
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'john@example.com',
+            'phone_number': '1234567890',  # Invalid format
+            'role': self.role.id
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('phone_number', response.data)
+        self.assertEqual(response.data['phone_number'][0], 'Please enter a valid phone number in the format (XXX) XXX-XXXX')
+
+    def test_update_team_member_without_phone(self):
+        url = reverse('teammember-detail', args=[self.team_member.id])
+        data = {
+            'first_name': 'John',
+            'last_name': 'Doe',
+            'email': 'john@example.com',
+            'role': self.role.id
+        }
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('phone_number', response.data)
+        self.assertEqual(response.data['phone_number'][0], 'This field is required.')
