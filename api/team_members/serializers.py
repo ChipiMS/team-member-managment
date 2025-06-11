@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import TeamMember, Role, Permission
+import re
 
 class PermissionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,4 +36,15 @@ class TeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = TeamMember
         fields = ['id', 'first_name', 'last_name', 'email', 'phone_number', 'role', 'role_id', 'created_at', 'updated_at']
-        read_only_fields = ['created_at', 'updated_at'] 
+        read_only_fields = ['created_at', 'updated_at']
+
+    def validate_phone_number(self, value):
+        if not value:
+            raise serializers.ValidationError("Phone number is required")
+            
+        # Validate phone number format (XXX) XXX-XXXX
+        phone_pattern = r'^\(\d{3}\) \d{3}-\d{4}$'
+        if not re.match(phone_pattern, value):
+            raise serializers.ValidationError("Please enter a valid phone number in the format (XXX) XXX-XXXX")
+            
+        return value 
