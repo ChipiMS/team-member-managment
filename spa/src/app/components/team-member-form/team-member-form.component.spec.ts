@@ -1,28 +1,27 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TeamMemberFormComponent } from './team-member-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Store } from '@ngxs/store';
-import { of, Observable } from 'rxjs';
-import { LoadTeamMembers } from '../../core/store/team-members/team-members.actions';
-import { LoadRoles } from '../../core/store/roles/roles.actions';
-import { TeamMember } from '../../core/models/team-member.model';
-import { Role } from '../../core/models/role.model';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { CardModule } from 'primeng/card';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { Router, RouterModule } from '@angular/router';
-import { MessageModule } from 'primeng/message';
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { SkeletonModule } from 'primeng/skeleton';
-import { RadioButtonModule } from 'primeng/radiobutton';
+import { Store, TypedSelector } from '@ngxs/store';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
+import { DropdownModule } from 'primeng/dropdown';
+import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputMaskModule } from 'primeng/inputmask';
+import { InputTextModule } from 'primeng/inputtext';
+import { MessageModule } from 'primeng/message';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { SkeletonModule } from 'primeng/skeleton';
+import { Observable, of } from 'rxjs';
+import { Role } from '../../core/models/role.model';
+import { TeamMember } from '../../core/models/team-member.model';
+import { LoadRoles } from '../../core/store/roles/roles.actions';
 import { RolesState } from '../../core/store/roles/roles.state';
+import { LoadTeamMembers } from '../../core/store/team-members/team-members.actions';
 import { TeamMembersState } from '../../core/store/team-members/team-members.state';
-import { TypedSelector } from '@ngxs/store';
+import { TeamMemberFormComponent } from './team-member-form.component';
 
 describe('TeamMemberFormComponent', () => {
   let component: TeamMemberFormComponent;
@@ -88,6 +87,7 @@ describe('TeamMemberFormComponent', () => {
         RouterModule.forRoot([]),
       ],
       providers: [
+        MessageService,
         { provide: Store, useValue: storeMock },
         { provide: ConfirmationService, useValue: confirmationServiceMock },
       ],

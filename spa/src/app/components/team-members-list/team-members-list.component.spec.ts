@@ -1,15 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TeamMembersListComponent } from './team-members-list.component';
-import { Store } from '@ngxs/store';
-import { of, Observable } from 'rxjs';
-import { LoadTeamMembers } from '../../core/store/team-members/team-members.actions';
-import { TeamMember } from '../../core/models/team-member.model';
+import { Router, RouterModule } from '@angular/router';
+import { Store, TypedSelector } from '@ngxs/store';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Observable, of } from 'rxjs';
+import { TeamMember } from '../../core/models/team-member.model';
+import { LoadTeamMembers } from '../../core/store/team-members/team-members.actions';
 import { TeamMembersState } from '../../core/store/team-members/team-members.state';
-import { TypedSelector } from '@ngxs/store';
+import { TeamMembersListComponent } from './team-members-list.component';
 
 describe('TeamMembersListComponent', () => {
   let component: TeamMembersListComponent;
@@ -65,7 +65,7 @@ describe('TeamMembersListComponent', () => {
         CardModule,
         RouterModule.forRoot([]),
       ],
-      providers: [{ provide: Store, useValue: storeMock }],
+      providers: [MessageService, { provide: Store, useValue: storeMock }],
     }).compileComponents();
 
     router = TestBed.inject(Router);

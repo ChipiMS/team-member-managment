@@ -1,15 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TeamMemberInformationComponent } from './team-member-information.component';
+import { Router, RouterModule } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { of } from 'rxjs';
-import { DeleteTeamMember } from '../../core/store/team-members/team-members.actions';
-import { TeamMember } from '../../core/models/team-member.model';
+import { Confirmation, ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import { Router, RouterModule } from '@angular/router';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, Confirmation } from 'primeng/api';
-import { CommonModule } from '@angular/common';
+import { of } from 'rxjs';
+import { TeamMember } from '../../core/models/team-member.model';
+import { DeleteTeamMember } from '../../core/store/team-members/team-members.actions';
+import { TeamMemberInformationComponent } from './team-member-information.component';
 
 describe('TeamMemberInformationComponent', () => {
   let component: TeamMemberInformationComponent;
@@ -45,6 +45,7 @@ describe('TeamMemberInformationComponent', () => {
         RouterModule.forRoot([]),
       ],
       providers: [
+        MessageService,
         { provide: Store, useValue: storeMock },
         { provide: ConfirmationService, useValue: confirmationServiceMock },
       ],

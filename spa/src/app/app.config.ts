@@ -1,13 +1,14 @@
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
-import { routes } from './app.routes';
-import { providePrimeNG } from 'primeng/config';
-import { provideStore } from '@ngxs/store';
-import { TeamMembersState } from './core/store/team-members/team-members.state';
-import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { RolesState } from './core/store/roles/roles.state';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { provideStore } from '@ngxs/store';
 import { MessageService } from 'primeng/api';
+import { providePrimeNG } from 'primeng/config';
+import { routes } from './app.routes';
+import { errorInterceptor } from './core/interceptors/error/error.interceptor';
+import { RolesState } from './core/store/roles/roles.state';
+import { TeamMembersState } from './core/store/team-members/team-members.state';
 import { PrimeNgPreset } from './prime-ng.preset';
 
 /**
@@ -17,7 +18,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimationsAsync(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([errorInterceptor])),
     provideRouter(routes, withComponentInputBinding()),
     providePrimeNG({
       theme: {
